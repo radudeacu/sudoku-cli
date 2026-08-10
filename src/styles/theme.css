@@ -1,0 +1,131 @@
+/*
+ * Theme tokens. Light is the base on :root; dark is redefined twice on purpose —
+ * once under prefers-color-scheme for the OS default, once under [data-theme="dark"]
+ * so an explicit toggle wins in both directions. Never define a colour anywhere else.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Ground - the gradient the glass surfaces float above */
+  --bg-base: #eaeef6;
+  --bg-wash-1: rgba(120, 165, 255, 0.55);
+  --bg-wash-2: rgba(255, 160, 210, 0.4);
+  --bg-wash-3: rgba(130, 230, 205, 0.4);
+
+  /* Glass surfaces */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.74);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-shadow: 0 8px 32px rgba(23, 32, 64, 0.13);
+  --glass-blur: 20px;
+  --glass-saturate: 175%;
+
+  /* Text */
+  --text-primary: #10131a;
+  --text-secondary: #4c5566;
+  --text-muted: #78808f;
+
+  /* Grid content */
+  --digit-given: #10131a;
+  --digit-entry: #1d4ed8;
+  --digit-note: #6b7280;
+
+  /* Grid surfaces */
+  --cell-bg: rgba(255, 255, 255, 0.3);
+  --cell-bg-peer: rgba(37, 99, 235, 0.09);
+  --cell-bg-match: rgba(37, 99, 235, 0.17);
+  --cell-bg-selected: rgba(37, 99, 235, 0.28);
+  --grid-line: rgba(16, 19, 26, 0.14);
+  --grid-line-box: rgba(16, 19, 26, 0.45);
+
+  /* State */
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --error: #c2182f;
+  --error-bg: rgba(194, 24, 47, 0.15);
+  --success: #10784a;
+
+  /* Geometry */
+  --radius-panel: 24px;
+  --radius-control: 14px;
+  --radius-cell: 5px;
+  --tap-target: 44px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --bg-base: #0a0c11;
+    --bg-wash-1: rgba(70, 105, 200, 0.4);
+    --bg-wash-2: rgba(150, 70, 160, 0.3);
+    --bg-wash-3: rgba(40, 150, 140, 0.28);
+
+    --glass-bg: rgba(255, 255, 255, 0.07);
+    --glass-bg-strong: rgba(255, 255, 255, 0.13);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-highlight: rgba(255, 255, 255, 0.28);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    --glass-saturate: 150%;
+
+    --text-primary: #f3f5f9;
+    --text-secondary: #b3bccd;
+    --text-muted: #8892a3;
+
+    --digit-given: #f3f5f9;
+    --digit-entry: #7cc4ff;
+    --digit-note: #98a2b5;
+
+    --cell-bg: rgba(255, 255, 255, 0.04);
+    --cell-bg-peer: rgba(124, 196, 255, 0.09);
+    --cell-bg-match: rgba(124, 196, 255, 0.17);
+    --cell-bg-selected: rgba(124, 196, 255, 0.3);
+    --grid-line: rgba(255, 255, 255, 0.12);
+    --grid-line-box: rgba(255, 255, 255, 0.42);
+
+    --accent: #62a8ff;
+    --accent-contrast: #0a0c11;
+    --error: #ff7a8c;
+    --error-bg: rgba(255, 122, 140, 0.18);
+    --success: #4ade9f;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg-base: #0a0c11;
+  --bg-wash-1: rgba(70, 105, 200, 0.4);
+  --bg-wash-2: rgba(150, 70, 160, 0.3);
+  --bg-wash-3: rgba(40, 150, 140, 0.28);
+
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-bg-strong: rgba(255, 255, 255, 0.13);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-highlight: rgba(255, 255, 255, 0.28);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --glass-saturate: 150%;
+
+  --text-primary: #f3f5f9;
+  --text-secondary: #b3bccd;
+  --text-muted: #8892a3;
+
+  --digit-given: #f3f5f9;
+  --digit-entry: #7cc4ff;
+  --digit-note: #98a2b5;
+
+  --cell-bg: rgba(255, 255, 255, 0.04);
+  --cell-bg-peer: rgba(124, 196, 255, 0.09);
+  --cell-bg-match: rgba(124, 196, 255, 0.17);
+  --cell-bg-selected: rgba(124, 196, 255, 0.3);
+  --grid-line: rgba(255, 255, 255, 0.12);
+  --grid-line-box: rgba(255, 255, 255, 0.42);
+
+  --accent: #62a8ff;
+  --accent-contrast: #0a0c11;
+  --error: #ff7a8c;
+  --error-bg: rgba(255, 122, 140, 0.18);
+  --success: #4ade9f;
+}

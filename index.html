@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Sudoku - generate and solve puzzles in your browser." />
+    <title>Sudoku</title>
+    <script>
+      // Applied before first paint so a saved dark theme never flashes light.
+      try {
+        var saved = localStorage.getItem('sudoku.theme')
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved)
+        }
+      } catch (_) {
+        /* localStorage unavailable (private mode); fall back to prefers-color-scheme */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
