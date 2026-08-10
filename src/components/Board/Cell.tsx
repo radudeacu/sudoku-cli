@@ -12,6 +12,8 @@ export interface CellProps {
   /** Holds the same digit as the selected cell. */
   readonly matching: boolean
   readonly incorrect: boolean
+  /** The grid's single tab stop. Exactly one cell carries it. */
+  readonly focusable: boolean
   readonly onSelect: (index: number) => void
 }
 
@@ -45,6 +47,7 @@ export const Cell = memo(function Cell({
   peer,
   matching,
   incorrect,
+  focusable,
   onSelect,
 }: CellProps) {
   const row = rowOf(index)
@@ -65,7 +68,7 @@ export const Cell = memo(function Cell({
       role="gridcell"
       className={classNames.join(' ')}
       // Roving tabindex: one stop for the whole grid, arrows move within it.
-      tabIndex={selected ? 0 : -1}
+      tabIndex={focusable ? 0 : -1}
       aria-label={describe(index, value, given)}
       aria-selected={selected}
       onClick={() => onSelect(index)}

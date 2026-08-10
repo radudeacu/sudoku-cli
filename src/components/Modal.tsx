@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import './Modal.css'
 
 interface ModalProps {
@@ -8,6 +8,13 @@ interface ModalProps {
 }
 
 export function Modal({ title, children, onClose }: ModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
+  // Move focus into the dialog so it is announced and Escape reaches it.
+  useEffect(() => {
+    dialogRef.current?.focus()
+  }, [])
+
   useEffect(() => {
     if (!onClose) return
     function onKeyDown(event: KeyboardEvent) {
@@ -22,7 +29,14 @@ export function Modal({ title, children, onClose }: ModalProps) {
 
   return (
     <div className="modal-backdrop">
-      <div className="modal glass" role="dialog" aria-modal="true" aria-label={title}>
+      <div
+        ref={dialogRef}
+        tabIndex={-1}
+        className="modal glass"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+      >
         <h2 className="modal__title">{title}</h2>
         {children}
       </div>

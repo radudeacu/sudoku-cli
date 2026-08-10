@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { CELLS, PEERS } from '../../lib/grid'
 import { useGame } from '../../state/GameContext'
 import { isGiven } from '../../state/gameReducer'
@@ -23,6 +23,18 @@ export function Board() {
   const incorrect = useMemo(() => new Set(state.incorrect), [state.incorrect])
   const selectedValue = state.selected === null ? 0 : (state.values[state.selected] as number)
 
+  // Keep DOM focus on the selected cell, but only once focus is already inside the
+  // grid - otherwise arrowing around would yank focus away from a button.
+  const gridRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid || state.selected === null) return
+    if (!grid.contains(document.activeElement)) return
+
+    const cell = grid.children[state.selected]
+    if (cell instanceof HTMLElement) cell.focus()
+  }, [state.selected])
+
   if (error) {
     return (
       <div className="board-panel glass">
@@ -46,11 +58,13 @@ export function Board() {
   return (
     <div className="board-panel glass">
       <div
+        ref={gridRef}
         role="grid"
         aria-label="Sudoku grid"
         className={`board${state.status === 'paused' ? ' board--paused' : ''}`}
-        // Hidden from assistive tech while paused for the same reason it is blurred.
-        aria-hidden={state.status === 'paused'}
+        // `inert` removes it from focus and the accessibility tree together, which
+        // aria-hidden alone would not do while a cell still holds focus.
+        inert={state.status === 'paused'}
       >
         {Array.from({ length: CELLS }, (_, index) => {
           const value = state.values[index] as number
@@ -65,6 +79,9 @@ export function Board() {
               peer={peers.has(index)}
               matching={selectedValue !== 0 && value === selectedValue && state.selected !== index}
               incorrect={incorrect.has(index)}
+              // With nothing selected the first cell holds the tab stop, so the
+              // grid is still reachable by keyboard.
+              focusable={state.selected === null ? index === 0 : state.selected === index}
               onSelect={select}
             />
           )

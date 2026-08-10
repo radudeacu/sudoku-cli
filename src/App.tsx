@@ -19,8 +19,13 @@ function GameScreen() {
     <div className="app">
       <Header onShowStats={() => setShowStats(true)} />
       <Board />
-      <NumberPad />
-      <Controls />
+
+      {/* Pad and controls share one glass surface, keeping the blurred layers to
+          four: header, board, this panel, and any open dialog. */}
+      <div className="app__input glass">
+        <NumberPad />
+        <Controls />
+      </div>
 
       <NamePrompt />
       <CompletionDialog />

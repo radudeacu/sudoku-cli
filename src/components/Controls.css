@@ -16,9 +16,9 @@
   padding: 0 16px;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-control);
+  /* No backdrop-filter here: these sit inside a glass panel already, and blurring
+     every control would mean a dozen compositing layers on a phone. */
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   box-shadow: inset 0 1px 0 var(--glass-highlight);
   font-size: 0.95rem;
   cursor: pointer;

@@ -20,9 +20,8 @@
   padding: 0;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-control);
+  /* Nine more blurred layers would be the single most expensive thing on screen. */
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   box-shadow: inset 0 1px 0 var(--glass-highlight);
   color: var(--digit-entry);
   cursor: pointer;

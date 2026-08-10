@@ -25,12 +25,15 @@
   /* Text */
   --text-primary: #10131a;
   --text-secondary: #4c5566;
-  --text-muted: #78808f;
+  /* Darker than a typical "muted" grey: it labels 10px counts on the pad. */
+  --text-muted: #5f6878;
 
   /* Grid content */
   --digit-given: #10131a;
-  --digit-entry: #1d4ed8;
-  --digit-note: #6b7280;
+  /* Deep enough to clear 4.5:1 while sitting on the blue selection tint. */
+  --digit-entry: #1a44bf;
+  /* Pencil marks render around 8px, so they need more contrast than body text. */
+  --digit-note: #4b5563;
 
   /* Grid surfaces */
   --cell-bg: rgba(255, 255, 255, 0.3);
@@ -43,8 +46,8 @@
   /* State */
   --accent: #2563eb;
   --accent-contrast: #ffffff;
-  --error: #c2182f;
-  --error-bg: rgba(194, 24, 47, 0.15);
+  --error: #a8122a;
+  --error-bg: rgba(168, 18, 42, 0.15);
   --success: #10784a;
 
   /* Geometry */
@@ -87,8 +90,8 @@
 
     --accent: #62a8ff;
     --accent-contrast: #0a0c11;
-    --error: #ff7a8c;
-    --error-bg: rgba(255, 122, 140, 0.18);
+    --error: #ff94a2;
+    --error-bg: rgba(255, 148, 162, 0.18);
     --success: #4ade9f;
   }
 }
@@ -125,7 +128,7 @@
 
   --accent: #62a8ff;
   --accent-contrast: #0a0c11;
-  --error: #ff7a8c;
-  --error-bg: rgba(255, 122, 140, 0.18);
+  --error: #ff94a2;
+  --error-bg: rgba(255, 148, 162, 0.18);
   --success: #4ade9f;
 }
