@@ -1,0 +1,122 @@
+.board-panel {
+  position: relative;
+  padding: 14px;
+}
+
+.board-panel__message {
+  margin: 0;
+  padding: 80px 0;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.board-panel__message--error {
+  color: var(--error);
+}
+
+.board-panel__paused {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  aspect-ratio: 1;
+  /* The outer frame and the box rules are the same weight, so the 3x3 structure reads evenly. */
+  border: 2px solid var(--grid-line-box);
+  border-radius: var(--radius-cell);
+  overflow: hidden;
+}
+
+.board--paused {
+  filter: blur(7px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 0;
+  border-right: 1px solid var(--grid-line);
+  border-bottom: 1px solid var(--grid-line);
+  background: var(--cell-bg);
+  color: var(--digit-entry);
+  font-size: clamp(1rem, 5.2vw, 1.6rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.cell:nth-child(9n) {
+  border-right: 0;
+}
+
+.cell:nth-child(n + 73) {
+  border-bottom: 0;
+}
+
+.cell--box-right {
+  border-right: 2px solid var(--grid-line-box);
+}
+
+.cell--box-bottom {
+  border-bottom: 2px solid var(--grid-line-box);
+}
+
+.cell--given {
+  color: var(--digit-given);
+  font-weight: 600;
+}
+
+.cell--peer {
+  background: var(--cell-bg-peer);
+}
+
+.cell--matching {
+  background: var(--cell-bg-match);
+}
+
+.cell--selected {
+  background: var(--cell-bg-selected);
+}
+
+/* Colour alone must not carry the error, so wrong cells also get a tinted ground. */
+.cell--incorrect {
+  color: var(--error);
+  background: var(--error-bg);
+}
+
+.cell__digit {
+  pointer-events: none;
+}
+
+.cell__notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  color: var(--digit-note);
+  font-size: 0.5em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cell__note {
+  display: grid;
+  place-items: center;
+}

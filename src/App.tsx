@@ -1,8 +1,12 @@
-import { useTheme } from './hooks/useTheme'
+import { Board } from './components/Board/Board'
+import { useKeyboard } from './hooks/useKeyboard'
+import { GameProvider } from './state/GameContext'
+import { SettingsProvider, useSettings } from './state/SettingsContext'
 import './App.css'
 
-export function App() {
-  const { theme, toggle } = useTheme()
+function GameScreen() {
+  const { theme, toggleTheme } = useSettings()
+  useKeyboard()
 
   return (
     <div className="app">
@@ -11,16 +15,24 @@ export function App() {
         <button
           type="button"
           className="app__theme-toggle"
-          onClick={toggle}
+          onClick={toggleTheme}
           aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
         >
           {theme === 'dark' ? '☾' : '☀'}
         </button>
       </header>
 
-      <main className="app__panel glass">
-        <p className="app__placeholder">Puzzle engine lands next.</p>
-      </main>
+      <Board />
     </div>
+  )
+}
+
+export function App() {
+  return (
+    <SettingsProvider>
+      <GameProvider>
+        <GameScreen />
+      </GameProvider>
+    </SettingsProvider>
   )
 }
