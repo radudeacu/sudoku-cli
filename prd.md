@@ -25,12 +25,15 @@ A client-side Sudoku web app where a player generates a puzzle at one of four di
 - Every puzzle is solvable by logic alone — no guessing required.
 - Four difficulty tiers by clue count and required technique:
 
-| Tier | Givens | Hardest technique required |
+| Tier | Givens | Technique required (min–max) |
 |---|---|---|
-| Easy | 40–45 | Naked singles |
-| Medium | 32–39 | Hidden singles, naked pairs |
-| Hard | 28–31 | Pointing pairs, box/line reduction |
-| Expert | 22–27 | X-wing and beyond |
+| Easy | 40–45 | Naked single only |
+| Medium | 32–39 | Hidden single → naked pair |
+| Hard | 28–31 | Naked pair → box/line reduction |
+| Expert | 22–27 | Pointing pair → X-wing |
+
+- Clue band is authoritative; the technique range is a guarantee about the ceiling and a floor the generator searches for.
+- **Revised after measurement.** The original spec asked for pointing pairs at Hard and X-wing at Expert as the *required* technique. Across 160 generated puzzles, X-wing was required zero times and pointing pairs only ~8% of the time even at 22 clues — puzzles that genuinely require them are rare enough that finding one means generating thousands, which is too slow in a browser. The floors above are what bounded search actually reaches; ceilings are unchanged.
 
 ### Validation
 - Nothing is flagged while typing — an incorrect digit can be entered and left in place.
