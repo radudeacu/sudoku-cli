@@ -1,0 +1,71 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.header__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.header__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.header__difficulty {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  color: var(--text-secondary);
+}
+
+.header__stats {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.header__mistakes {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.header__timer {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.header__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-control);
+  background: var(--glass-bg-strong);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: var(--cell-bg-match);
+}
+
+.icon-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

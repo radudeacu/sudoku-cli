@@ -1,47 +1,16 @@
 .app {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: min(560px, 100% - 32px);
+  gap: 14px;
+  width: min(560px, 100% - 24px);
   margin-inline: auto;
-  padding-block: 24px 40px;
+  padding-block: 20px 32px;
 }
 
-.app__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 20px;
-}
-
-.app__title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.app__theme-toggle {
-  display: grid;
-  place-items: center;
-  width: var(--tap-target);
-  height: var(--tap-target);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-control);
-  background: var(--glass-bg-strong);
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-
-.app__panel {
-  display: grid;
-  place-items: center;
-  min-height: 320px;
-  padding: 24px;
-}
-
-.app__placeholder {
-  margin: 0;
-  color: var(--text-secondary);
+@media (max-width: 700px) {
+  .app {
+    width: min(560px, 100% - 16px);
+    gap: 12px;
+    padding-block: 12px 24px;
+  }
 }
