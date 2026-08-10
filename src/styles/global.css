@@ -40,6 +40,17 @@ button {
   outline-offset: 2px;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Reusable glass surface. Only ever applied to large panels - never per cell. */
 .glass {
   background: var(--glass-bg);

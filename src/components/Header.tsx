@@ -3,7 +3,7 @@ import { useGame } from '../state/GameContext'
 import { useSettings } from '../state/SettingsContext'
 import './Header.css'
 
-export function Header() {
+export function Header({ onShowStats }: { onShowStats: () => void }) {
   const { state, dispatch, elapsedMs, difficulty } = useGame()
   const { theme, toggleTheme } = useSettings()
 
@@ -35,6 +35,14 @@ export function Header() {
           aria-label={paused ? 'Resume' : 'Pause'}
         >
           {paused ? '▶' : '❚❚'}
+        </button>
+        <button
+          type="button"
+          className="icon-button"
+          onClick={onShowStats}
+          aria-label="Show stats"
+        >
+          ▤
         </button>
         <button
           type="button"

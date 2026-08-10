@@ -20,6 +20,8 @@ export interface GameState {
   /** Cells the last Check found wrong. Cleared per cell as it is edited. */
   readonly incorrect: readonly number[]
   readonly hintsUsed: number
+  /** True when Solve revealed the answer, so the game is recorded as abandoned. */
+  readonly revealed: boolean
   readonly status: GameStatus
   readonly past: readonly Snapshot[]
   readonly future: readonly Snapshot[]
@@ -54,6 +56,7 @@ export function initialGameState(): GameState {
     mistakes: 0,
     incorrect: [],
     hintsUsed: 0,
+    revealed: false,
     status: 'generating',
     past: [],
     future: [],
@@ -275,6 +278,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
             values: cloneGrid(state.puzzle.solution),
             notes: new Uint16Array(CELLS),
             incorrect: [],
+            revealed: true,
             status: 'complete',
             past: [],
             future: [],

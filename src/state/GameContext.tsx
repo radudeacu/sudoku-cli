@@ -11,9 +11,15 @@ import {
   type ReactNode,
 } from 'react'
 import { useTimer } from '../hooks/useTimer'
+import { appendRecord, type GameOutcome, type GameRecord } from '../lib/stats'
+import { clearGame, loadGame, loadHistory, saveGame, saveHistory } from '../lib/storage'
 import type { Difficulty } from '../lib/types'
 import type { GenerateRequest, GenerateResponse } from '../workers/generator.worker'
 import { gameReducer, initialGameState, type GameAction, type GameState } from './gameReducer'
+import { fromSavedGame, toSavedGame } from './persistence'
+
+const SAVE_DEBOUNCE_MS = 400
+const SAVE_INTERVAL_MS = 5_000
 
 interface GameValue {
   readonly state: GameState
@@ -21,6 +27,7 @@ interface GameValue {
   readonly difficulty: Difficulty
   readonly error: string | null
   readonly elapsedMs: number
+  readonly history: readonly GameRecord[]
   readonly newGame: (difficulty: Difficulty) => void
   readonly restart: () => void
 }
@@ -33,9 +40,17 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
   // The PRD starts the clock at first input, not when the puzzle appears.
   const [started, setStarted] = useState(false)
-  const workerRef = useRef<Worker | null>(null)
+  const [history, setHistory] = useState<readonly GameRecord[]>(loadHistory)
 
+  const workerRef = useRef<Worker | null>(null)
   const { elapsedMs, reset: resetTimer } = useTimer(started && state.status === 'playing')
+
+  // Callbacks below must stay stable, so they read the current game from here
+  // rather than closing over it.
+  const latest = useRef({ state, difficulty, elapsedMs, started })
+  useEffect(() => {
+    latest.current = { state, difficulty, elapsedMs, started }
+  })
 
   useEffect(() => {
     const worker = new Worker(new URL('../workers/generator.worker.ts', import.meta.url), {
@@ -64,8 +79,38 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (state.past.length > 0) setStarted(true)
   }, [state.past.length])
 
+  const saveNow = useCallback(() => {
+    const current = latest.current
+    const saved = toSavedGame(current.state, current.difficulty, current.elapsedMs)
+    if (saved) saveGame(saved)
+  }, [])
+
+  const recordGame = useCallback((outcome: GameOutcome) => {
+    const current = latest.current
+    if (!current.state.puzzle) return
+
+    const record: GameRecord = {
+      difficulty: current.difficulty,
+      durationMs: current.elapsedMs,
+      assisted: current.state.hintsUsed > 0,
+      outcome,
+      finishedAt: Date.now(),
+    }
+
+    setHistory((entries) => {
+      const next = appendRecord(entries, record)
+      saveHistory(next)
+      return next
+    })
+  }, [])
+
   const newGame = useCallback(
     (next: Difficulty) => {
+      const current = latest.current
+      const inProgress = current.state.status === 'playing' || current.state.status === 'paused'
+      if (inProgress && current.started) recordGame('abandoned')
+
+      clearGame()
       setDifficulty(next)
       setError(null)
       setStarted(false)
@@ -75,7 +120,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const request: GenerateRequest = { difficulty: next }
       workerRef.current?.postMessage(request)
     },
-    [resetTimer],
+    [recordGame, resetTimer],
   )
 
   const restart = useCallback(() => {
@@ -84,14 +129,62 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'restart' })
   }, [resetTimer])
 
-  // The worker effect above runs first, so it is ready by the time this fires.
+  // Resume a saved game if there is one; otherwise open with an easy puzzle.
   useEffect(() => {
-    newGame('easy')
-  }, [newGame])
+    const saved = loadGame()
+    if (!saved) {
+      newGame('easy')
+      return
+    }
+
+    const restored = fromSavedGame(saved)
+    setDifficulty(restored.difficulty)
+    resetTimer(restored.elapsedMs)
+    setStarted(restored.elapsedMs > 0)
+    dispatch({ type: 'restore', state: restored.state })
+  }, [newGame, resetTimer])
+
+  const finishedRef = useRef(false)
+  useEffect(() => {
+    if (state.status !== 'complete') {
+      finishedRef.current = false
+      return
+    }
+    if (finishedRef.current) return
+
+    finishedRef.current = true
+    recordGame(state.revealed ? 'abandoned' : 'completed')
+    clearGame()
+  }, [state.status, state.revealed, recordGame])
+
+  // Save shortly after each change...
+  useEffect(() => {
+    if (state.status !== 'playing' && state.status !== 'paused') return
+    const id = setTimeout(saveNow, SAVE_DEBOUNCE_MS)
+    return () => clearTimeout(id)
+  }, [state, difficulty, saveNow])
+
+  // ...and on a slow tick, so a long think is not lost from the timer.
+  useEffect(() => {
+    if (state.status !== 'playing') return
+    const id = setInterval(saveNow, SAVE_INTERVAL_MS)
+    return () => clearInterval(id)
+  }, [state.status, saveNow])
+
+  // Closing or backgrounding the tab is the most likely way to leave mid-game.
+  useEffect(() => {
+    const onHide = () => saveNow()
+    window.addEventListener('pagehide', onHide)
+    document.addEventListener('visibilitychange', onHide)
+    return () => {
+      window.removeEventListener('pagehide', onHide)
+      document.removeEventListener('visibilitychange', onHide)
+    }
+  }, [saveNow])
 
   const value = useMemo(
-    () => ({ state, dispatch, difficulty, error, elapsedMs, newGame, restart }),
-    [state, difficulty, error, elapsedMs, newGame, restart],
+    () => ({ state, dispatch, difficulty, error, elapsedMs, history, newGame, restart }),
+    [state, difficulty, error, elapsedMs, history, newGame, restart],
   )
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>

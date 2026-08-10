@@ -1,0 +1,43 @@
+/* The table is the one thing here that can outgrow a narrow phone. */
+.stats__scroll {
+  overflow-x: auto;
+}
+
+.stats {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats th,
+.stats td {
+  padding: 7px 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.stats thead th {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--grid-line);
+}
+
+.stats tbody th {
+  text-align: left;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.stats tbody tr + tr th,
+.stats tbody tr + tr td {
+  border-top: 1px solid var(--grid-line);
+}
+
+.stats__note {
+  margin-top: 14px;
+  font-size: 0.8rem;
+}
